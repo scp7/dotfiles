@@ -1,15 +1,11 @@
 # Git Workflow
 
-This repo now manages a baseline Git config in [`git/.gitconfig`](/Users/lukehinds/dev/dotfiles/git/.gitconfig).
+This repo now manages a baseline Git config in [`git/.gitconfig`](../git/.gitconfig).
 
 ## Managed defaults
 
 The managed Git config currently sets:
 
-- user name
-- user email
-- signing key
-- commit signing on by default
 - global excludes file
 - `delta` as the pager
 - `zdiff3` merge conflict style
@@ -62,7 +58,7 @@ Current defaults:
 - line numbers
 - keyboard navigation
 
-If those defaults become too wide for a laptop display, adjust [`git/.gitconfig`](/Users/lukehinds/dev/dotfiles/git/.gitconfig) rather than overriding ad hoc.
+If those defaults become too wide for a laptop display, adjust [`git/.gitconfig`](../git/.gitconfig) rather than overriding ad hoc.
 
 ## Suggested local additions
 

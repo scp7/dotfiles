@@ -12,13 +12,13 @@ bash install.sh
 
 ## What `install.sh` does
 
-The bootstrap process in [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh) is opinionated but intentionally small:
+The bootstrap process in [`install.sh`](../install.sh) is opinionated but intentionally small:
 
 1. Detect the operating system.
 2. Install core packages.
 3. Install Starship prompt if missing.
 4. Clone zsh plugins into `~/.zsh/plugins` if missing.
-5. Run [`sync.sh`](/Users/lukehinds/dev/dotfiles/sync.sh) to place symlinks in `$HOME`.
+5. Run [`sync.sh`](../sync.sh) to place symlinks in `$HOME`.
 6. Set `zsh` as the default shell if needed.
 
 ## Platform behavior
@@ -32,17 +32,17 @@ The bootstrap process in [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh
 ### Debian / Ubuntu
 
 - Runs `apt-get update`.
-- Installs the current package set directly in [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh).
+- Installs the current package set directly in [`install.sh`](../install.sh).
 
 ### RHEL / Fedora / Amazon Linux
 
 - Uses `dnf` if present, otherwise `yum`.
-- Installs the current package set directly in [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh).
+- Installs the current package set directly in [`install.sh`](../install.sh).
 
 ### Arch / Manjaro
 
 - Uses `pacman`.
-- Installs the current package set directly in [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh).
+- Installs the current package set directly in [`install.sh`](../install.sh).
 
 ## Symlinked files
 
@@ -67,6 +67,6 @@ Some configuration should stay outside the repo:
 
 ## Maintenance notes
 
-- On macOS, prefer updating [`homebrew/Brewfile`](/Users/lukehinds/dev/dotfiles/homebrew/Brewfile) after package changes.
-- On Linux, package changes currently require editing [`install.sh`](/Users/lukehinds/dev/dotfiles/install.sh) directly.
-- If a tool is optional, guard it in [`zsh/.zshrc`](/Users/lukehinds/dev/dotfiles/zsh/.zshrc) with `command -v` or file checks.
+- On macOS, prefer updating [`homebrew/Brewfile`](../homebrew/Brewfile) after package changes.
+- On Linux, package changes currently require editing [`install.sh`](../install.sh) directly.
+- If a tool is optional, guard it in [`zsh/.zshrc`](../zsh/.zshrc) with `command -v` or file checks.

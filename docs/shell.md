@@ -1,10 +1,10 @@
 # Shell Workflow
 
-The shell layer is managed in [`zsh/.zshrc`](/Users/lukehinds/dev/dotfiles/zsh/.zshrc) and aims to keep startup predictable while allowing optional tools to appear automatically when installed.
+The shell layer is managed in [`zsh/.zshrc`](../zsh/.zshrc) and aims to keep startup predictable while allowing optional tools to appear automatically when installed.
 
 ## Prompt
 
-- Starship is the prompt, configured in [`starship/starship.toml`](/Users/lukehinds/dev/dotfiles/starship/starship.toml).
+- Starship is the prompt, configured in [`starship/starship.toml`](../starship/starship.toml).
 - Uses the catppuccin mocha palette with muted accent colors (no bold, no background blocks).
 - Shows directory, git branch, git status with per-type counts, and language versions when detected.
 
@@ -20,7 +20,7 @@ Active plugins:
 
 ## History
 
-[`atuin/.config/atuin/config.toml`](/Users/lukehinds/dev/dotfiles/atuin/.config/atuin/config.toml) defines the current Atuin behavior.
+[`atuin/.config/atuin/config.toml`](../atuin/.config/atuin/config.toml) defines the current Atuin behavior.
 
 Key choices:
 

@@ -1,13 +1,5 @@
-[user]
-	name = Luke Hinds
-	email = lukehinds@gmail.com
-	signingkey = 1BE75411D1730E18
-
-[commit]
-	gpgsign = true
-
 [core]
-	excludesfile = /Users/lukehinds/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	pager = delta
 
 [interactive]

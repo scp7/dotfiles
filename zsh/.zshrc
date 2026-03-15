@@ -220,9 +220,19 @@ command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
 
 claude() {
-  command nono run --profile claude-code --allow-cwd -- /Users/lukehinds/.local/bin/claude "$@"
+  local nono_args=()
+  while [[ $# -gt 0 && "$1" != "--" ]]; do
+    nono_args+=("$1"); shift
+  done
+  [[ "$1" == "--" ]] && shift
+  command nono run --profile claude-code --allow-cwd "${nono_args[@]}" -- "$HOME/.local/bin/claude" "$@"
 }
 
 codex() {
-  command nono run --profile codex --allow-cwd -- /Users/lukehinds/.local/state/fnm_multishells/17028_1773508819414/bin/codex "$@"
+  local nono_args=()
+  while [[ $# -gt 0 && "$1" != "--" ]]; do
+    nono_args+=("$1"); shift
+  done
+  [[ "$1" == "--" ]] && shift
+  command nono run --profile codex --allow-cwd "${nono_args[@]}" -- "$(command -v codex)" "$@"
 }
