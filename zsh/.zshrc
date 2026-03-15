@@ -12,7 +12,14 @@ fi
 # -----------------------------
 # Completions
 # -----------------------------
+zmodload zsh/complist
 autoload -Uz compinit && compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # -----------------------------
 # Zsh plugins (sourced directly)
@@ -135,6 +142,7 @@ alias gs='git status'
 alias gd='git diff'
 alias g-='git checkout -'
 alias gpm='git pull origin main'
+alias gcm='git checkout main'
 alias gl='git log --oneline'
 
 # vim
