@@ -1,9 +1,9 @@
 [core]
 	excludesfile = ~/.gitignore_global
-	pager = delta
+	pager = "delta 2>/dev/null || less"
 
 [interactive]
-	diffFilter = delta --color-only
+	diffFilter = "delta --color-only 2>/dev/null || cat"
 
 [delta]
 	navigate = true
