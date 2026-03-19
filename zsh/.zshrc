@@ -176,8 +176,6 @@ wd() { wt remove -D "$1"; }
 # cargo/nono
 command -v cargo &>/dev/null && alias nn='cargo run --'
 
-# nono sandbox wrapper for claude
-command -v nono &>/dev/null && sclaude() { nono run --profile claude-code "$@" -- claude; }
 
 # -----------------------------
 # Functions
@@ -217,22 +215,3 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 
 # direnv should load as late as possible.
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
-
-
-claude() {
-  local nono_args=()
-  while [[ $# -gt 0 && "$1" != "--" ]]; do
-    nono_args+=("$1"); shift
-  done
-  [[ "$1" == "--" ]] && shift
-  command nono run --profile claude-code --allow-cwd "${nono_args[@]}" -- "$HOME/.local/bin/claude" "$@"
-}
-
-codex() {
-  local nono_args=()
-  while [[ $# -gt 0 && "$1" != "--" ]]; do
-    nono_args+=("$1"); shift
-  done
-  [[ "$1" == "--" ]] && shift
-  command nono run --profile codex --allow-cwd "${nono_args[@]}" -- "$(command -v codex)" "$@"
-}

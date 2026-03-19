@@ -5,32 +5,59 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
-config.default_cursor_style = "SteadyBar"
+config.default_cursor_style = "BlinkingUnderline"
+config.cursor_thickness = 1
+config.force_reverse_video_cursor = true
+config.cursor_blink_rate = 500
+config.cursor_blink_ease_in = "EaseIn"
+config.cursor_blink_ease_out = "EaseOut"
+
 config.automatically_reload_config = true
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_decorations = "RESIZE"
 config.check_for_updates = false
 config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = false
+config.tab_bar_at_bottom = true
 config.font_size = 16
-config.font = wezterm.font("JetBrainsMono Nerd Font")
+config.font = wezterm.font("FiraCode Nerd Font", { weight = "Regular" })
 config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = true
+config.hide_tab_bar_if_only_one_tab = false
 config.tab_max_width = 32
+config.bold_brightens_ansi_colors = "BrightAndBold"
+config.allow_square_glyphs_to_overflow_width = "WhenFollowedBySpace"
+config.anti_alias_custom_block_glyphs = true
+config.warn_about_missing_glyphs = false
 config.window_padding = {
-	left = 10,
-	right = 10,
-	top = 8,
-	bottom = 0,
+	left = 2,
+	right = 2,
+	top = 2,
+	bottom = 1,
 }
-config.window_background_opacity = 0.94
+config.window_background_opacity = 0.98
 config.macos_window_background_blur = 20
+config.enable_scroll_bar = true
 config.inactive_pane_hsb = {
 	saturation = 0.5,
 	brightness = 0.4,
 }
 config.pane_focus_follows_mouse = true
+
+config.colors = {
+	tab_bar = {
+		background = "#2A2A37",
+		inactive_tab_edge = "#54546D",
+		active_tab = { bg_color = "#7E9CD8", fg_color = "#1F1F28" },
+		inactive_tab = { bg_color = "#54546D", fg_color = "#C8C093" },
+		inactive_tab_hover = { bg_color = "#363646", fg_color = "#DCD7BA", italic = true },
+		new_tab = { bg_color = "#54546D", fg_color = "#C8C093" },
+		new_tab_hover = { bg_color = "#7E9CD8", fg_color = "#1F1F28", italic = true },
+	},
+}
+
+config.command_palette_bg_color = "#938AA9"
+config.command_palette_fg_color = "#1F1F28"
+config.command_palette_font_size = 14
 local act = wezterm.action
 config.keys = {
 	{ key = "Enter", mods = "CTRL", action = act({ SendString = "\x1b[13;5u" }) },
