@@ -1,87 +1,50 @@
-palette = "muted"
+"$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+$username\
+$hostname\
 $directory\
 $git_branch\
+$git_state\
 $git_status\
-${custom.worktree}\
-$python\
-$golang\
-$rust\
-$nodejs\
 $cmd_duration\
 $line_break\
+$python\
 $character"""
 
 [directory]
-truncation_length = 3
-truncation_symbol = "~/"
-format = "[$path]($style) "
-style = "fg:text"
-
-[git_branch]
-symbol = ""
-format = "[ $symbol $branch(:$remote_branch) ]($style)"
-style = "fg:branchfg bg:branchbg"
-
-[git_status]
-format = "[ $conflicted$stashed$deleted$renamed$modified$staged$untracked$ahead_behind]($style)"
-conflicted = "=${count} "
-stashed = "*${count} "
-deleted = "x${count} "
-renamed = "r${count} "
-modified = "~${count} "
-staged = "+${count} "
-untracked = "?${count} "
-ahead = "up${count} "
-behind = "dn${count} "
-diverged = "up${ahead_count} dn${behind_count} "
-style = "fg:statusfg bg:statusbg"
-
-[custom.worktree]
-command = "git rev-parse --show-toplevel 2>/dev/null | xargs basename"
-when = "git rev-parse --is-inside-work-tree 2>/dev/null && [ \"$(git worktree list 2>/dev/null | wc -l)\" -gt 1 ]"
-format = "[ wt:$output ]($style)"
-style = "fg:wtfg bg:wtbg"
-shell = ["bash", "--noprofile", "--norc", "-c"]
+style = "blue"
 
 [character]
-success_symbol = "[>](fg:promptok)"
-error_symbol = "[>](fg:prompterr)"
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
+
+[git_branch]
+format = "[$branch]($style)"
+style = "bright-black"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
 
 [cmd_duration]
-min_time = 2000
-format = " [$duration]($style) "
-style = "fg:dim"
+format = "[$duration]($style) "
+style = "yellow"
 
 [python]
-symbol = ""
-format = " [$symbol $version]($style) "
-style = "fg:dim"
-
-[golang]
-symbol = ""
-format = " [$symbol $version]($style) "
-style = "fg:dim"
-
-[rust]
-symbol = ""
-format = " [$symbol $version]($style) "
-style = "fg:dim"
-
-[nodejs]
-symbol = ""
-format = " [$symbol $version]($style) "
-style = "fg:dim"
-
-[palettes.muted]
-text = "#c0c0b0"
-dim = "#706b63"
-branchfg = "#b0c4a8"
-branchbg = "#2b3328"
-statusfg = "#c4a8a8"
-statusbg = "#332828"
-wtfg = "#a8b8c4"
-wtbg = "#282d33"
-promptok = "#7a9970"
-prompterr = "#997070"
+format = "[$virtualenv]($style) "
+style = "bright-black"
+detect_extensions = []
+detect_files = []

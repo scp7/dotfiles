@@ -1,17 +1,7 @@
 local wezterm = require("wezterm")
+local theme_module = require("theme")
 local mux = wezterm.mux
 local nf = wezterm.nerdfonts
-
--- Kanagawa theme colors (muted steel-blue bar to match target)
-local theme = {
-	bg = "#1F1F28",
-	bar_bg = "#2A2A37",
-	fg = "#DCD7BA",
-	active = "#7E9CD8",    -- blue for active tab
-	inactive = "#54546D",  -- muted blue-gray for inactive tabs
-	hover = "#363646",     -- subtle hover
-	dark = "#1F1F28",
-}
 
 -- Tab separators (powerline arrow style)
 local TAB_LEFT = nf.pl_right_hard_divider
@@ -21,23 +11,14 @@ local TAB_RIGHT = nf.pl_left_hard_divider
 local SB_LEFT = nf.pl_left_hard_divider
 local SB_RIGHT = nf.pl_right_hard_divider
 
--- Status bar gradient colors (muted steel-blue tones matching target)
-local sb_colors = {
-	"#54546D",  -- darkest slate
-	"#6A6A8E",  -- mid slate
-	"#8B8DA3",  -- lighter slate
-	"#A0A2B8",  -- lightest slate
-}
-
 wezterm.on("gui-startup", function()
 	mux.spawn_window({})
 end)
 
 wezterm.on("update-status", function(window, pane)
-	local overrides = window:get_config_overrides() or {}
-	overrides.colors = overrides.colors or {}
-	overrides.colors.split = theme.active
-	window:set_config_overrides(overrides)
+	local palette = theme_module.current()
+	local theme = palette.status
+	local sb_colors = palette.sb_colors
 
 	-- Left status: mode indicator
 	local mode = window:active_key_table()
@@ -45,16 +26,16 @@ wezterm.on("update-status", function(window, pane)
 	local mode_bg = theme.active
 	if mode == "search_mode" then
 		mode_label = " " .. nf.md_magnify .. " SEARCH "
-		mode_bg = "#E6C384"
+		mode_bg = palette.search_bg
 	elseif mode == "copy_mode" then
 		mode_label = " " .. nf.md_content_copy .. " COPY "
-		mode_bg = "#98BB6C"
+		mode_bg = palette.copy_bg
 	end
 
 	if mode_label ~= "" then
 		window:set_left_status(wezterm.format({
 			{ Background = { Color = mode_bg } },
-			{ Foreground = { Color = theme.dark } },
+			{ Foreground = { Color = theme.active_fg } },
 			{ Attribute = { Intensity = "Bold" } },
 			{ Text = mode_label },
 			{ Background = { Color = theme.bar_bg } },
@@ -118,8 +99,17 @@ wezterm.on("update-status", function(window, pane)
 		table.insert(status, { Foreground = { Color = theme.active } })
 		table.insert(status, { Text = SB_RIGHT })
 		table.insert(status, { Background = { Color = theme.active } })
-		table.insert(status, { Foreground = { Color = theme.dark } })
+		table.insert(status, { Foreground = { Color = theme.active_fg } })
 		table.insert(status, { Text = " " .. nf.md_folder .. " " .. cwd .. " " })
+	end
+
+	-- Segment 2b: git branch (theme accent)
+	if branch ~= "" then
+		table.insert(status, { Foreground = { Color = palette.git_bg } })
+		table.insert(status, { Text = SB_RIGHT })
+		table.insert(status, { Background = { Color = palette.git_bg } })
+		table.insert(status, { Foreground = { Color = theme.active_fg } })
+		table.insert(status, { Text = " " .. nf.dev_git_branch .. " " .. branch .. " " })
 	end
 
 	-- Segment 3: date/time
@@ -155,6 +145,8 @@ wezterm.on("update-status", function(window, pane)
 end)
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+	local theme = theme_module.current().status
+
 	local tab_num = tab.tab_index + 1
 	local title = tab.active_pane.title
 	if title and #title > 20 then
@@ -171,9 +163,13 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		tab_bg = theme.inactive
 	end
 
-	local tab_fg = theme.dark
-	if hover and not is_active then
-		tab_fg = theme.inactive
+	local tab_fg
+	if is_active then
+		tab_fg = theme.active_fg
+	elseif hover then
+		tab_fg = theme.dark
+	else
+		tab_fg = theme.dark
 	end
 
 	return {
@@ -190,4 +186,18 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		{ Foreground = { Color = is_active and theme.fg or (hover and theme.fg or "#908e82") } },
 		{ Text = " " .. title .. " " },
 	}
+end)
+
+-- Keep colors in sync when macOS appearance flips (or any config reload).
+-- Detects change via background color; no-op if already applied.
+wezterm.on("window-config-reloaded", function(window)
+	local m = theme_module.current()
+	local overrides = window:get_config_overrides() or {}
+	if overrides.colors and overrides.colors.background == m.colors.background then
+		return
+	end
+	overrides.colors = m.colors
+	overrides.command_palette_bg_color = m.command_palette.bg
+	overrides.command_palette_fg_color = m.command_palette.fg
+	window:set_config_overrides(overrides)
 end)

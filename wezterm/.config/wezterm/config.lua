@@ -1,4 +1,5 @@
 local wezterm = require("wezterm")
+local theme = require("theme")
 local config = {}
 
 if wezterm.config_builder then
@@ -19,7 +20,7 @@ config.window_decorations = "RESIZE"
 config.check_for_updates = false
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
-config.font_size = 16
+config.font_size = 14
 config.font = wezterm.font("FiraCode Nerd Font", { weight = "Regular" })
 config.enable_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = false
@@ -38,25 +39,16 @@ config.window_background_opacity = 0.98
 config.macos_window_background_blur = 20
 config.enable_scroll_bar = true
 config.inactive_pane_hsb = {
-	saturation = 0.5,
-	brightness = 0.4,
+	saturation = 0.8,
+	brightness = 0.9,
 }
 config.pane_focus_follows_mouse = true
 
-config.colors = {
-	tab_bar = {
-		background = "#2A2A37",
-		inactive_tab_edge = "#54546D",
-		active_tab = { bg_color = "#7E9CD8", fg_color = "#1F1F28" },
-		inactive_tab = { bg_color = "#54546D", fg_color = "#C8C093" },
-		inactive_tab_hover = { bg_color = "#363646", fg_color = "#DCD7BA", italic = true },
-		new_tab = { bg_color = "#54546D", fg_color = "#C8C093" },
-		new_tab_hover = { bg_color = "#7E9CD8", fg_color = "#1F1F28", italic = true },
-	},
-}
-
-config.command_palette_bg_color = "#938AA9"
-config.command_palette_fg_color = "#1F1F28"
+-- Initial colors based on macOS appearance at startup; events.lua keeps it in sync.
+local initial = theme.current()
+config.colors = initial.colors
+config.command_palette_bg_color = initial.command_palette.bg
+config.command_palette_fg_color = initial.command_palette.fg
 config.command_palette_font_size = 14
 local act = wezterm.action
 config.keys = {
@@ -76,6 +68,34 @@ config.keys = {
 	-- Cmd+Arrow: move to beginning/end of line
 	{ key = "LeftArrow", mods = "CMD", action = act({ SendString = "\x01" }) },
 	{ key = "RightArrow", mods = "CMD", action = act({ SendString = "\x05" }) },
+	-- Cmd+Shift+T: toggle light/dark theme (sets manual override)
+	{
+		key = "t",
+		mods = "CMD|SHIFT",
+		action = wezterm.action_callback(function(window)
+			theme.toggle()
+			local m = theme.current()
+			local overrides = window:get_config_overrides() or {}
+			overrides.colors = m.colors
+			overrides.command_palette_bg_color = m.command_palette.bg
+			overrides.command_palette_fg_color = m.command_palette.fg
+			window:set_config_overrides(overrides)
+		end),
+	},
+	-- Cmd+Shift+Y: clear manual override, follow macOS appearance
+	{
+		key = "y",
+		mods = "CMD|SHIFT",
+		action = wezterm.action_callback(function(window)
+			theme.clear_override()
+			local m = theme.current()
+			local overrides = window:get_config_overrides() or {}
+			overrides.colors = m.colors
+			overrides.command_palette_bg_color = m.command_palette.bg
+			overrides.command_palette_fg_color = m.command_palette.fg
+			window:set_config_overrides(overrides)
+		end),
+	},
 }
 config.hyperlink_rules = {
 	{

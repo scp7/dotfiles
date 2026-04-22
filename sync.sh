@@ -24,6 +24,7 @@ link git/.gitconfig .gitconfig
 link wezterm/.config/wezterm/wezterm.lua .config/wezterm/wezterm.lua
 link wezterm/.config/wezterm/config.lua .config/wezterm/config.lua
 link wezterm/.config/wezterm/events.lua .config/wezterm/events.lua
+link wezterm/.config/wezterm/theme.lua .config/wezterm/theme.lua
 link starship/starship.toml .config/starship.toml
 
 # Create .zsh_local from template if it doesn't exist
