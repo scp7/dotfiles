@@ -66,7 +66,7 @@ M.dark = {
 			"#83A598", "#C678DD", "#70C0BA", "#EAEAEA",
 		},
 		brights = {
-			"#666666", "#EC3E45", "#90C966", "#EDBF69",
+			"#8A8A8A", "#EC3E45", "#90C966", "#EDBF69",
 			"#73BA9F", "#C858E9", "#2BCEC2", "#FFFFFF",
 		},
 		tab_bar = {
