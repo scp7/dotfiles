@@ -37,11 +37,24 @@
 
 | Keys | Action |
 |------|--------|
-| `Cmd + C` | Copy selection |
+| `Cmd + C` | Copy selection with confirmation |
+| `Ctrl + Shift + C` | Copy selection with confirmation |
 | `Cmd + V` | Paste |
 | `Cmd + F` | Search |
 | `Cmd + Shift + Space` | Quick select mode |
 | `Cmd + K` | Clear scrollback |
+
+## Copy Mode
+
+Use this only when you want to copy without the mouse.
+
+| Keys | Action |
+|------|--------|
+| `Ctrl + Shift + X` | Enter copy mode |
+| `Space` | Start selecting |
+| `Arrow keys` / `hjkl` | Move selection |
+| `y` / `Enter` | Copy and exit |
+| `Esc` / `q` | Exit copy mode |
 
 ## Scrollback
 

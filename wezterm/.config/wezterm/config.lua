@@ -51,9 +51,48 @@ config.command_palette_bg_color = initial.command_palette.bg
 config.command_palette_fg_color = initial.command_palette.fg
 config.command_palette_font_size = 14
 local act = wezterm.action
+
+local function notify(window, message, status_message, ok)
+	wezterm.GLOBAL.clipboard_status = {
+		message = status_message,
+		ok = ok,
+		expires_at = os.time() + 2,
+	}
+	pcall(function()
+		window:toast_notification("WezTerm", message, nil, 1800)
+	end)
+end
+
+local function copy_selected_text(window, pane)
+	local ok, selection = pcall(function()
+		return window:get_selection_text_for_pane(pane)
+	end)
+
+	if ok and (selection == nil or selection == "") then
+		notify(window, "No selection to copy", "NO SELECTION", false)
+		return false
+	end
+
+	window:perform_action(act.CopyTo("Clipboard"), pane)
+	notify(window, "Copied selection to clipboard", "COPIED", true)
+	return true
+end
+
+local copy_selection = wezterm.action_callback(function(window, pane)
+	copy_selected_text(window, pane)
+end)
+
+local copy_selection_and_close = wezterm.action_callback(function(window, pane)
+	if copy_selected_text(window, pane) then
+		window:perform_action(act.CopyMode("Close"), pane)
+	end
+end)
+
 config.keys = {
 	{ key = "Enter", mods = "CTRL", action = act({ SendString = "\x1b[13;5u" }) },
 	{ key = "Enter", mods = "SHIFT", action = act({ SendString = "\x1b[13;2u" }) },
+	{ key = "c", mods = "CMD", action = copy_selection },
+	{ key = "c", mods = "CTRL|SHIFT", action = copy_selection },
 	{ key = "d", mods = "CMD", action = act({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
 	{ key = "d", mods = "CMD|SHIFT", action = act({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
 	{ key = "LeftArrow", mods = "CMD|SHIFT", action = act({ ActivatePaneDirection = "Left" }) },
@@ -97,6 +136,31 @@ config.keys = {
 		end),
 	},
 }
+
+local key_tables = wezterm.gui.default_key_tables()
+local copy_mode_overrides = {
+	{ key = "y", mods = "NONE", action = copy_selection_and_close },
+	{ key = "Enter", mods = "NONE", action = copy_selection_and_close },
+	{ key = "c", mods = "CMD", action = copy_selection_and_close },
+	{ key = "c", mods = "CTRL", action = copy_selection_and_close },
+	{ key = "c", mods = "CTRL|SHIFT", action = copy_selection_and_close },
+}
+local overridden_copy_keys = {}
+for _, binding in ipairs(copy_mode_overrides) do
+	overridden_copy_keys[binding.key .. ":" .. binding.mods] = true
+end
+local copy_mode = {}
+for _, binding in ipairs(key_tables.copy_mode) do
+	if not overridden_copy_keys[binding.key .. ":" .. binding.mods] then
+		table.insert(copy_mode, binding)
+	end
+end
+for _, binding in ipairs(copy_mode_overrides) do
+	table.insert(copy_mode, binding)
+end
+key_tables.copy_mode = copy_mode
+config.key_tables = key_tables
+
 config.hyperlink_rules = {
 	{
 		regex = "\\((\\w+://\\S+)\\)",

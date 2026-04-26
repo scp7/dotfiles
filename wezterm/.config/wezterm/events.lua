@@ -24,10 +24,18 @@ wezterm.on("update-status", function(window, pane)
 	local mode = window:active_key_table()
 	local mode_label = ""
 	local mode_bg = theme.active
-	if mode == "search_mode" then
+	local clipboard_status = wezterm.GLOBAL.clipboard_status
+	if clipboard_status and clipboard_status.expires_at and clipboard_status.expires_at >= os.time() then
+		mode_label = " " .. nf.md_content_copy .. " " .. clipboard_status.message .. " "
+		mode_bg = clipboard_status.ok and palette.copy_bg or palette.search_bg
+	elseif clipboard_status and clipboard_status.expires_at and clipboard_status.expires_at < os.time() then
+		wezterm.GLOBAL.clipboard_status = nil
+	end
+
+	if mode_label == "" and mode == "search_mode" then
 		mode_label = " " .. nf.md_magnify .. " SEARCH "
 		mode_bg = palette.search_bg
-	elseif mode == "copy_mode" then
+	elseif mode_label == "" and mode == "copy_mode" then
 		mode_label = " " .. nf.md_content_copy .. " COPY "
 		mode_bg = palette.copy_bg
 	end

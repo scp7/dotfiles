@@ -85,3 +85,6 @@ fi
 if command -v starship &> /dev/null; then
     eval "$(starship init zsh)"
 fi
+
+# Machine-specific config and secrets (not committed)
+[ -f "$HOME/.zsh_local" ] && source "$HOME/.zsh_local"
