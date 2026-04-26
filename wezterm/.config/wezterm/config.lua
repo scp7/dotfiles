@@ -7,8 +7,8 @@ if wezterm.config_builder then
 end
 
 config.default_cursor_style = "BlinkingUnderline"
-config.cursor_thickness = 1
-config.force_reverse_video_cursor = true
+config.cursor_thickness = 3
+config.force_reverse_video_cursor = false
 config.cursor_blink_rate = 500
 config.cursor_blink_ease_in = "EaseIn"
 config.cursor_blink_ease_out = "EaseOut"
