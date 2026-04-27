@@ -34,6 +34,7 @@ link wezterm/.config/wezterm/events.lua .config/wezterm/events.lua
 link wezterm/.config/wezterm/theme.lua .config/wezterm/theme.lua
 link starship/starship.toml .config/starship.toml
 link karabiner/karabiner.json .config/karabiner/karabiner.json
+link ghostty/.config/ghostty/config .config/ghostty/config
 
 # Create .zsh_local from template if it doesn't exist
 if [[ ! -f "$HOME/.zsh_local" ]]; then
