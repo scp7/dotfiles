@@ -60,6 +60,7 @@ alias grep='grep --color=auto'
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log --oneline --graph'
+alias chrome='open -a "Google Chrome"'
 
 # z - directory jumping
 if [ -f /opt/homebrew/etc/profile.d/z.sh ]; then
