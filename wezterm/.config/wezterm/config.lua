@@ -161,31 +161,30 @@ end
 key_tables.copy_mode = copy_mode
 config.key_tables = key_tables
 
-config.hyperlink_rules = {
+-- Ensure CMD+Click opens hyperlinks. Setting mouse_bindings is additive on top
+-- of defaults, but binding it explicitly avoids any reliance on defaults being
+-- present, and the CMD+Down Nop prevents a subtle bug where CMD-drag selection
+-- swallows the click's Up event.
+config.mouse_bindings = {
 	{
-		regex = "\\((\\w+://\\S+)\\)",
-		format = "$1",
-		highlight = 1,
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "CMD",
+		action = wezterm.action.OpenLinkAtMouseCursor,
 	},
 	{
-		regex = "\\[(\\w+://\\S+)\\]",
-		format = "$1",
-		highlight = 1,
-	},
-	{
-		regex = "\\{(\\w+://\\S+)\\}",
-		format = "$1",
-		highlight = 1,
-	},
-	{
-		regex = "<(\\w+://\\S+)>",
-		format = "$1",
-		highlight = 1,
-	},
-	{
-		regex = "[^(]\\b(\\w+://\\S+[)/a-zA-Z0-9-]+)",
-		format = "$1",
-		highlight = 1,
+		event = { Down = { streak = 1, button = "Left" } },
+		mods = "CMD",
+		action = wezterm.action.Nop,
 	},
 }
+
+-- Start from wezterm's defaults (covers http(s)://, mailto:, file://, ftp://,
+-- and bracketed URLs) and add a tighter bare-URL rule that stops at whitespace,
+-- quotes, and closing brackets so trailing punctuation isn't pulled into the URL.
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+table.insert(config.hyperlink_rules, {
+	regex = [[\b\w+://[\w.-]+(?:[:/?#][^\s)\]>}'"`]*)?]],
+	format = "$0",
+})
+
 return config
